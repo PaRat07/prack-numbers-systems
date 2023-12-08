@@ -217,6 +217,7 @@ Fraction &Fraction::operator/=(const uint132_t &other) {
 }
 
 void Print(std::ostream &out, Fraction frac, uint8_t sys) {
+    frac.SetSystem(sys);
     out << to_string(frac.num() / frac.den());
     frac -= frac.num() / frac.den();
     if (frac == 0) {
@@ -228,7 +229,14 @@ void Print(std::ostream &out, Fraction frac, uint8_t sys) {
     while (!ind_to_frac.contains(frac) && frac != 0) {
         ind_to_frac[frac] = fract_part.size();
         frac *= sys;
-        fract_part += to_string(frac.num() / frac.den());
+        uint8_t num = to_int(frac.num() / frac.den());
+        if (num < 10) {
+            fract_part.push_back('0' + num);
+        } else if (num < 10 + 26) {
+            fract_part.push_back('A' + (num - 10));
+        } else {
+            fract_part +='[' + to_string((int)num) + ']';
+        }
         frac -= frac.num() / frac.den();
     }
 
@@ -239,11 +247,11 @@ void Print(std::ostream &out, Fraction frac, uint8_t sys) {
         int to_print_brace = ind_to_frac[frac];
         for (int i = 0; i < fract_part.size(); ++i) {
             if (i == to_print_brace) {
-                out << '(' << std::flush;
+                out << '(';
             }
-            out << fract_part[i] << std::flush;
+            out << fract_part[i];
         }
-        out << ')' << std::flush;
+        out << ')';
     }
 }
 
@@ -258,39 +266,14 @@ void Fraction::Input(std::istream &in, uint8_t sys) {
         return;
     }
     std::string fract_part_s = num_s.substr(ind + 1);
-    ind = 0;
-    Fraction fract_part;
-    while (ind < fract_part_s.size() && fract_part_s[ind] != '(') {
-        if (fract_part_s[ind] == '[') {
-            throw std::runtime_error("not works yet");
-        } else if (fract_part_s[ind] >= 'A' && fract_part_s[ind] <= 'Z') {
-            fract_part *= sys;
-            fract_part += fract_part_s[ind] + 10 - 'A';
-        } else {
-            fract_part *= sys;
-            fract_part += fract_part_s[ind] - '0';
-        }
-        ++ind;
-    }
-    fract_part /= my_bin_pow(sys, ind);
-    if (ind < fract_part_s.size()) {
-        std::string period_s = fract_part_s.substr(ind + 1);
+    std::string frac_part_s_without_period = fract_part_s.substr(0, fract_part_s.find_first_of('('));
+    Fraction fract_part(uint132_t(frac_part_s_without_period, sys), 1);
+    fract_part /= my_bin_pow(sys, frac_part_s_without_period.size());
+    if (frac_part_s_without_period.size() != fract_part_s.size()) {
+        std::string period_s = fract_part_s.substr(frac_part_s_without_period.size() + 1);
+        period_s.pop_back();
         if (!period_s.empty()) {
-            period_s.pop_back();
-            Fraction period;
-            ind = 0;
-            while (ind < period_s.size()) {
-                if (period_s[ind] == '[') {
-                    throw std::runtime_error("not works yet");
-                } else if (period_s[ind] >= 'A' && period_s[ind] <= 'Z') {
-                    period *= sys;
-                    period += period_s[ind] + 10 - 'A';
-                } else {
-                    period *= uint132_t(sys, sys);
-                    period += uint132_t(period_s[ind] - '0', sys);
-                }
-                ++ind;
-            }
+            Fraction period(period_s);
             period /= my_bin_pow(sys, period_s.size()) - 1;
             period /= my_bin_pow(sys, fract_part_s.size() - 2 - period_s.size());
             *this = zel_part + fract_part + period;
@@ -298,6 +281,11 @@ void Fraction::Input(std::istream &in, uint8_t sys) {
         }
     }
     *this = zel_part + fract_part;
+}
+
+void Fraction::SetSystem(uint8_t sys) {
+    num_.SetSystem(sys);
+    den_.SetSystem(sys);
 }
 
 uint132_t gcd(uint132_t first_number, uint132_t second_number) {

@@ -37,6 +37,7 @@ class Fraction {
     Fraction &operator/=(const uint132_t &other);
 
     void Input(std::istream &in, uint8_t sys);
+    void SetSystem(uint8_t sys);
  private:
     bool is_less_0_ = false;
     uint132_t num_ = 0, den_ = 1;
@@ -46,3 +47,4 @@ class Fraction {
 };
 
 void Print(std::ostream &out, Fraction frac, uint8_t sys);
+

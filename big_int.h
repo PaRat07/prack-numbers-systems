@@ -1,6 +1,7 @@
 #include <vector>
 #include <cstdint>
 #include <iostream>
+#include <algorithm>
 
 class uint132_t {
  public:
@@ -33,7 +34,7 @@ class uint132_t {
 
     uint132_t &operator*=(uint132_t other);
 
-    uint132_t &operator/=(const uint132_t &other);
+    uint132_t &operator/=(uint132_t other);
 
     uint132_t &operator<<=(size_t shift);
 
@@ -43,6 +44,7 @@ class uint132_t {
 
     friend bool operator<(const uint132_t &lhs, const uint132_t &rhs);
     friend std::string to_string(const uint132_t &num);
+    friend uint64_t to_int(uint132_t num);
  private:
     template<typename It>
     uint132_t(It beg, It end, uint8_t sys)

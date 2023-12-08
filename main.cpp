@@ -1,16 +1,14 @@
 #include "fraction.h"
 
 using namespace std;
+
+// 2 - 10
+// 1110001101.10(1001)
+// 909.65
+
+
 int main() {
-//    uint132_t x(13'000'000'000);
-//    uint64_t num = 13'000'000'000;
-//    for (int i = 0; i < 6; ++i) {
-//        num *= 13;
-//        x *= 13;
-//        assert(x == num);
-//    }
-//    cout << to_string(x) << endl;
     Fraction frac;
-    frac.Input(cin, 10);
+    frac.Input(cin, 45);
     Print(cout, frac, 10);
 }

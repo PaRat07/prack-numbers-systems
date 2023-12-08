@@ -107,11 +107,11 @@ uint132_t &uint132_t::operator*=(uint132_t other) {
     return *this;
 }
 
-uint132_t &uint132_t::operator/=(const uint132_t &other) {
-    uint132_t l = 0, r = std::max(*this, other) + 1;
-    while (r > l + uint132_t(1, 10)) {
-        uint132_t mid = StupidDiv(l + r, 2);
-        uint132_t val = mid * other;
+uint132_t &uint132_t::operator/=(uint132_t other) {
+    other.SetSystem(GetSystem());
+    uint132_t l(0, GetSystem()), r = std::max(*this, other) + 1;
+    while (r > l + uint132_t(1, GetSystem())) {
+        uint132_t mid = (GetSystem() == 2 ? (l + r) >> 1 : StupidDiv(l + r, 2));
         if (mid * other <= *this) {
             l = mid;
         } else {
@@ -242,14 +242,36 @@ uint132_t uint132_t::StupidDiv(uint132_t a, uint8_t b) {
 }
 
 uint132_t::uint132_t(std::string s, uint8_t sys)
-    : data_(std::max(s.size(), 10ull), 0)
-    , system_(sys)
+        : data_(std::max(s.size(), 10ull), 0)
+        , system_(sys)
 {
+    int ind = 0;
     for (int i = 0; i < s.size(); ++i) {
-        data_[i] = s[s.size() - i - 1] - '0';
+        if (s[s.size() - i - 1] >= 0 && s[s.size() - i - 1] <= '9') {
+            if (ind >= data_.size()) data_.push_back(0);
+            data_[ind] = s[s.size() - i - 1] - '0';
+            ++ind;
+        } else if (s[s.size() - i - 1] >= 'A' && s[s.size() - i - 1] <= 'Z') {
+            if (ind >= data_.size()) data_.push_back(0);
+            data_[ind] = s[s.size() - i - 1] - '0' + 10;
+            ++ind;
+        } else {
+            if (ind >= data_.size()) data_.push_back(0);
+            std::string num(std::make_reverse_iterator(std::find(s.rbegin() + i, s.rend(), '[')), std::make_reverse_iterator(s.rbegin() + i + 1));
+            i += num.size() + 1;
+            data_[ind] = std::stol(num);
+            ++ind;
+        }
     }
 }
 
 void uint132_t::Reduce() {
     while (data_.size() > 10 && data_.back() == 0) data_.pop_back();
+}
+
+uint64_t to_int(uint132_t num) {
+    num.SetSystem(10);
+    std::string s(num.data_.rbegin(), num.data_.rend());
+    for (int i = 0; i <s.size(); ++i) s[i] += '0';
+    return std::stoll(s);
 }
