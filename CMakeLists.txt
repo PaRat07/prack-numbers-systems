@@ -12,7 +12,15 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(CMakeSFMLProject main.cpp button.cpp big_int.cpp fraction.cpp
         input_window.cpp
-        input_window.h)
+        input_window.h
+        rounded_rectangle.cpp
+        rounded_rectangle.h
+        converter.cpp
+        converter.h
+        general_data.h
+        general_data.cpp
+        output_window.cpp
+        output_window.h)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_20)
 

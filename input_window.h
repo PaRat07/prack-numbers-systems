@@ -1,35 +1,29 @@
+#include <functional>
 #include "SFML/Graphics.hpp"
 
-class InputWindow : sf::Drawable {
+#include "rounded_rectangle.h"
+#include "general_data.h"
+
+class InputWindow : public sf::Drawable {
  public:
-    InputWindow(sf::Vector2f pos, sf::Vector2f size)
-        : pos_(pos)
-        , size_(size)
-    {}
+    InputWindow(sf::Vector2f pos, sf::Vector2f size);
 
-    void Click(sf::Vector2f pos) {
-        if (abs(pos.x - pos_.x) <= size_.x / 2 && abs(pos.y - pos_.y) <= size_.y / 2) {
-            active_ = true;
-        }
-    }
+    void Click(sf::Vector2f pos);
 
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
+    void Write(sf::Uint32 event);
 
-    }
+    void Activate();
 
-    void Write(sf::Event::TextEvent event) {
-        if (active_) {
-            data.push_back(event.unicode);
-        }
-    }
+    void SetSwitchActivated(std::function<void()> new_val);
 
     std::string GetText() const {
-        return data;
+        return data_;
     }
  private:
     sf::Vector2f pos_, size_;
-    int draw_from_ = 0;
-    std::string data;
+    std::string data_;
     bool active_ = false;
+    std::function<void()> switch_activated;
 };

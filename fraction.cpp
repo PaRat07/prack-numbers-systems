@@ -15,7 +15,7 @@ Fraction::Fraction(uint132_t num, uint132_t den)
     if (den_ == 0) {
         throw std::logic_error("Denominator can't be equal to zero");
     }
-    Reduce();
+//    Reduce();
 }
 
 Fraction Fraction::operator-() const {
@@ -216,12 +216,13 @@ Fraction &Fraction::operator/=(const uint132_t &other) {
     return *this;
 }
 
-void Print(std::ostream &out, Fraction frac, uint8_t sys) {
+std::string Print(Fraction frac, uint8_t sys) {
+    std::string ans;
     frac.SetSystem(sys);
-    out << to_string(frac.num() / frac.den());
+    ans += to_string(frac.num() / frac.den());
     frac -= frac.num() / frac.den();
     if (frac == 0) {
-        return;
+        return ans;
     }
 
     std::string fract_part;
@@ -240,24 +241,23 @@ void Print(std::ostream &out, Fraction frac, uint8_t sys) {
         frac -= frac.num() / frac.den();
     }
 
-    out << '.';
+    ans += '.';
     if (frac == 0) {
-        out << fract_part;
+        ans += fract_part;
     } else {
         int to_print_brace = ind_to_frac[frac];
         for (int i = 0; i < fract_part.size(); ++i) {
             if (i == to_print_brace) {
-                out << '(';
+                ans += '(';
             }
-            out << fract_part[i];
+            ans += fract_part[i];
         }
-        out << ')';
+        ans += ')';
     }
+    return ans;
 }
 
-void Fraction::Input(std::istream &in, uint8_t sys) {
-    std::string num_s;
-    in >> num_s;
+void Fraction::Input(const std::string &num_s, uint8_t sys) {
     size_t ind = std::find(num_s.begin(), num_s.end(), '.') - num_s.begin();
     Fraction zel_part(uint132_t(num_s.substr(0, ind), sys),
                       uint132_t(1, sys));

@@ -1,22 +1,32 @@
+#include <iostream>
 #include "button.h"
 
-template<class Func>
-void Button<Func>::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    sf::RectangleShape rect(size_);
-    rect.setPosition(pos_.x - size_.x / 2, pos_.y - size_.y / 2);
+void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    sf::RoundedRectangleShape rect(size_);
+    rect.setPosition(pos_);
+    rect.setOutlineColor(outline_color);
+    rect.setFillColor(fill_color);
+    rect.setPosition(pos_);
+    rect.setRoundRadius(15.f);
     target.draw(rect);
+
+    sf::Text text;
+    text.setString(text_);
+    text.setFont(font);
+    text.setCharacterSize(letter_size);
+    text.setPosition(pos_.x + size_.x / 2 - text.getLocalBounds().width / 2, pos_.y + size_.y / 2 - text.getLocalBounds().height / 2);
+    target.draw(text);
 }
 
-template<class Func>
-void Button<Func>::Click(sf::Vector2f pos) const {
-    if (abs(pos.x - pos_.x) <= size_.x / 2 && abs(pos.y - pos_.y) <= size_.y / 2) {
+void Button::Click(sf::Vector2f pos) const {
+    if (std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 && std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2) {
         callback_();
     }
 }
 
-template<class Func>
-Button<Func>::Button(sf::Vector2f sz, sf::Vector2f pos, const Func &cb)
+Button::Button(sf::Vector2f pos, sf::Vector2f sz, std::string text, const std::function<void()> &cb)
         : callback_(cb)
         , size_(sz)
         , pos_(pos)
+        , text_(std::move(text))
 {}

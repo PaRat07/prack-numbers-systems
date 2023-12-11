@@ -36,7 +36,7 @@ class Fraction {
     Fraction &operator/=(const Fraction &other);
     Fraction &operator/=(const uint132_t &other);
 
-    void Input(std::istream &in, uint8_t sys);
+    void Input(const std::string &num_s, uint8_t sys);
     void SetSystem(uint8_t sys);
  private:
     bool is_less_0_ = false;
@@ -46,5 +46,5 @@ class Fraction {
     void Reduce();
 };
 
-void Print(std::ostream &out, Fraction frac, uint8_t sys);
+std::string Print(Fraction frac, uint8_t sys);
 
