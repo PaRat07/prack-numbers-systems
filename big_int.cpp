@@ -259,7 +259,7 @@ uint132_t::uint132_t(std::string s, uint8_t sys)
             if (ind >= data_.size()) data_.push_back(0);
             std::string num(std::make_reverse_iterator(std::find(s.rbegin() + i, s.rend(), '[')), std::make_reverse_iterator(s.rbegin() + i + 1));
             i += num.size() + 1;
-            data_[ind] = std::stol(num);
+            data_[ind] = std::stoi(num);
             ++ind;
         }
     }

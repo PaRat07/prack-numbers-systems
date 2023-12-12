@@ -257,7 +257,52 @@ std::string Print(Fraction frac, uint8_t sys) {
     return ans;
 }
 
+
+void AssertIsNumber(std::string s, uint8_t sys) {
+    int max_num = 0;
+    int cur_in_sq_braces = 0;
+    bool now_sq_braces = false, was_something_in_braces = false;
+    for (char sym : s) {
+        if (sym == '[') {
+            now_sq_braces = true;
+            was_something_in_braces = false;
+        } else if (sym == ']') {
+            if (!now_sq_braces) {
+                throw std::invalid_argument("] without [");
+            } else if (!was_something_in_braces) {
+                throw std::invalid_argument("Empty braces");
+            }
+            max_num = std::max(max_num, cur_in_sq_braces);
+        } else if (sym >= 'A' && sym <= 'Z') {
+            if (now_sq_braces) {
+                throw std::invalid_argument("Letters mustn't be between [ and ]");
+            }
+            max_num = std::max(max_num, 10 + sym - 'A');
+        } else if (sym >= '0' && sym <= '9') {
+            if (now_sq_braces) {
+                cur_in_sq_braces *= 10;
+                cur_in_sq_braces += sym - '0';
+                was_something_in_braces = true;
+            }
+            max_num = std::max(max_num, sym - '0');
+            was_something_in_braces = true;
+        } else if (sym == '.') {
+            if (now_sq_braces) {
+                throw std::invalid_argument("Square braces weren't closed before the point");
+            }
+        } else {
+            throw std::invalid_argument("Unexpected character");
+        }
+    }
+    if (max_num >= sys) {
+        throw std::invalid_argument("A digit is bigger then base");
+    } else if (now_sq_braces) {
+        throw std::invalid_argument("[ without ]");
+    }
+}
+
 void Fraction::Input(const std::string &num_s, uint8_t sys) {
+    AssertIsNumber(num_s, sys);
     size_t ind = std::find(num_s.begin(), num_s.end(), '.') - num_s.begin();
     Fraction zel_part(uint132_t(num_s.substr(0, ind), sys),
                       uint132_t(1, sys));

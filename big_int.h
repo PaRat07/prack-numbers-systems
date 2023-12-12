@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
+
 class uint132_t {
  public:
     uint132_t(uint64_t val = 0, uint8_t sys = 10);

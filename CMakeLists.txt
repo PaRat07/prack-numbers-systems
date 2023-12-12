@@ -20,7 +20,9 @@ add_executable(CMakeSFMLProject main.cpp button.cpp big_int.cpp fraction.cpp
         general_data.h
         general_data.cpp
         output_window.cpp
-        output_window.h)
+        output_window.h
+        error_message.cpp
+        error_message.h)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_20)
 

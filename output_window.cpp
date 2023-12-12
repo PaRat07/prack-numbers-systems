@@ -16,12 +16,13 @@ void OutputWindow::draw(sf::RenderTarget &target, sf::RenderStates states) const
     sf::Text text;
     text.setFont(font);
     text.setString(output_);
-    text.setCharacterSize(letter_size);
-    text.setPosition(sf::Vector2f(pos_.x, pos_.y + size_.y / 2 - letter_size));
     text.setFillColor(text_color);
+    text.setCharacterSize(std::min(letter_size, text.getCharacterSize() / text.getLocalBounds().width * (size_.x - 20)));
+    text.setPosition(sf::Vector2f(pos_.x, pos_.y + size_.y / 2 - text.getCharacterSize()));
+
     target.draw(text);
 }
 
 void OutputWindow::SetOutput(std::string output) {
-    output_ = output;
+    output_ = std::move(output);
 }

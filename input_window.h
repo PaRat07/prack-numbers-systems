@@ -1,4 +1,5 @@
 #include <functional>
+
 #include "SFML/Graphics.hpp"
 
 #include "rounded_rectangle.h"
@@ -16,8 +17,6 @@ class InputWindow : public sf::Drawable {
 
     void Activate();
 
-    void SetSwitchActivated(std::function<void()> new_val);
-
     std::string GetText() const {
         return data_;
     }
@@ -25,5 +24,4 @@ class InputWindow : public sf::Drawable {
     sf::Vector2f pos_, size_;
     std::string data_;
     bool active_ = false;
-    std::function<void()> switch_activated;
 };

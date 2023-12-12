@@ -31,14 +31,17 @@ void InputWindow::draw(sf::RenderTarget &target, sf::RenderStates states) const 
 void InputWindow::Write(sf::Uint32 event) {
     if (active_) {
         switch (event) {
+            // Backspace
             case 8:
                 if (!data_.empty()) {
                     data_.pop_back();
                 }
                 break;
+            // Enter
             case 42:
                 return;
             default:
+                std::cout << event << std::endl;
                 data_.push_back(event);
         }
     }
@@ -46,8 +49,4 @@ void InputWindow::Write(sf::Uint32 event) {
 
 void InputWindow::Activate() {
     active_ = true;
-}
-
-void InputWindow::SetSwitchActivated(std::function<void()> new_val) {
-    switch_activated = std::move(new_val);
 }

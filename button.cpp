@@ -14,7 +14,7 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     text.setString(text_);
     text.setFont(font);
     text.setCharacterSize(letter_size);
-    text.setPosition(pos_.x + size_.x / 2 - text.getLocalBounds().width / 2, pos_.y + size_.y / 2 - text.getLocalBounds().height / 2);
+    text.setPosition(pos_.x + size_.x / 2 - text.getLocalBounds().width / 2, pos_.y + size_.y / 2 - text.getLocalBounds().height);
     target.draw(text);
 }
 
