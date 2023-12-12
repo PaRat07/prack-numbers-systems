@@ -1,16 +1,16 @@
-#include "input_window.h"
+#include "inoutput_window.h"
 
-InputWindow::InputWindow(sf::Vector2f pos, sf::Vector2f size)
+InOutputWindow::InOutputWindow(sf::Vector2f pos, sf::Vector2f size)
     : pos_(pos)
     , size_(size)
 {}
 
-void InputWindow::Click(sf::Vector2f pos) {
+void InOutputWindow::Click(sf::Vector2f pos) {
     active_ = std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 &&
               std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2;
 }
 
-void InputWindow::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void InOutputWindow::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::RoundedRectangleShape rect(size_);
     rect.setPosition(pos_);
     rect.setOutlineColor(outline_color);
@@ -28,7 +28,7 @@ void InputWindow::draw(sf::RenderTarget &target, sf::RenderStates states) const 
     target.draw(text);
 }
 
-void InputWindow::Write(sf::Uint32 event) {
+void InOutputWindow::Write(sf::Uint32 event) {
     if (active_) {
         switch (event) {
             // Backspace
@@ -47,6 +47,10 @@ void InputWindow::Write(sf::Uint32 event) {
     }
 }
 
-void InputWindow::Activate() {
+void InOutputWindow::Activate() {
     active_ = true;
+}
+
+void InOutputWindow::SetText(std::string s) {
+    data_ = std::move(s);
 }

@@ -5,9 +5,9 @@
 #include "rounded_rectangle.h"
 #include "general_data.h"
 
-class InputWindow : public sf::Drawable {
+class InOutputWindow : public sf::Drawable {
  public:
-    InputWindow(sf::Vector2f pos, sf::Vector2f size);
+    InOutputWindow(sf::Vector2f pos, sf::Vector2f size);
 
     void Click(sf::Vector2f pos);
 
@@ -16,6 +16,8 @@ class InputWindow : public sf::Drawable {
     void Write(sf::Uint32 event);
 
     void Activate();
+
+    void SetText(std::string s);
 
     std::string GetText() const {
         return data_;

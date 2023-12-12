@@ -11,16 +11,14 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(prack_numbers_system main.cpp button.cpp big_int.cpp fraction.cpp
-        input_window.cpp
-        input_window.h
+        inoutput_window.cpp
+        inoutput_window.h
         rounded_rectangle.cpp
         rounded_rectangle.h
         converter.cpp
         converter.h
         general_data.h
         general_data.cpp
-        output_window.cpp
-        output_window.h
         error_message.cpp
         error_message.h)
 target_link_libraries(prack_numbers_system PRIVATE sfml-graphics)
