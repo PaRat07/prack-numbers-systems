@@ -11,8 +11,8 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(prack_numbers_system main.cpp button.cpp big_int.cpp fraction.cpp
-        inoutput_window.cpp
-        inoutput_window.h
+        inoutput_field.cpp
+        inoutput_field.h
         rounded_rectangle.cpp
         rounded_rectangle.h
         converter.cpp

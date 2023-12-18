@@ -1,7 +1,7 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 
-#include "inoutput_window.h"
+#include "inoutput_field.h"
 #include "button.h"
 #include "general_data.h"
 #include "fraction.h"
@@ -74,6 +74,8 @@ class Converter {
 
     void Convert() {
         try {
+            AssertIsUINT8(p_.GetText());
+            AssertIsUINT8(q_.GetText());
             Fraction frac;
             frac.Input(num_.GetText(), std::stoi(p_.GetText()));
             res_.SetText(::Print(frac, std::stoi(q_.GetText())));
@@ -109,7 +111,7 @@ class Converter {
     std::optional<ErrorMessage> err_;
     Button print_, scan_, ok_;
     sf::Text number_, old_base_, new_base_, result_;
-    InOutputWindow num_, p_, q_, res_;
+    InOutputField num_, p_, q_, res_;
     sf::RenderWindow win_;
 
     void Render() {
@@ -129,5 +131,16 @@ class Converter {
             win_.draw(*err_);
         }
         win_.display();
+    }
+
+    void AssertIsUINT8(const std::string &s) {
+        for (char sym : s) {
+            if (sym > '9' || sym < '0') {
+                throw std::invalid_argument("Unexpected character");
+            }
+        }
+        if (s.size() > 4 || stoi(s) > 255) {
+            throw std::invalid_argument("To big number");
+        }
     }
 };

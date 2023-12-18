@@ -5,9 +5,9 @@
 #include "rounded_rectangle.h"
 #include "general_data.h"
 
-class InOutputWindow : public sf::Drawable {
+class InOutputField : public sf::Drawable {
  public:
-    InOutputWindow(sf::Vector2f pos, sf::Vector2f size);
+    InOutputField(sf::Vector2f pos, sf::Vector2f size);
 
     void Click(sf::Vector2f pos);
 
